@@ -25,31 +25,34 @@ export const registerSchema = Yup.object({
 });
 
 export const addRecipeSchema = Yup.object({
-  title: Yup.string()
-    .min(3, 'Minimum 3 characters')
+  name: Yup.string()
     .max(64, 'Maximum 64 characters')
-    .required('Required field'),
+    .required('Name is required'),
   description: Yup.string()
-    .min(10, 'Minimum 10 characters')
     .max(200, 'Maximum 200 characters')
-    .required('Required field'),
-  time: Yup.string()
+    .required('Description is required'),
+  cookingTime: Yup.number()
     .typeError('Must be a number')
-    .min(1, 'Min 1 minute')
-    .max(360, 'Max 360 minutes')
-    .required('Required field'),
+    .min(1, 'Minimum 1 minute')
+    .max(360, 'Maximum 360 minutes')
+    .required('Cooking time is required'),
   calories: Yup.number()
     .typeError('Must be a number')
-    .min(1, 'Min 1')
-    .max(10000, 'Max 10000')
+    .min(1, 'Minimum 1 calorie')
+    .max(10000, 'Maximum 10000 calories')
     .nullable()
     .transform((value, originalValue) => (originalValue === '' ? null : value)),
-  category: Yup.string().required('Select a category'),
-  instructions: Yup.string()
-    .min(3, 'Minimum 3 characters')
+  category: Yup.string().required('Category is required'),
+  ingredient: Yup.string().required('Ingredient is required'),
+  ingredientAmount: Yup.number()
+    .typeError('Must be a number')
+    .min(2, 'Minimum amount is 2')
+    .max(16, 'Maximum amount is 16')
+    .required('Ingredient amount is required'),
+  instruction: Yup.string()
     .max(1200, 'Maximum 1200 characters')
-    .required('Required field'),
-  photo: Yup.mixed()
+    .required('Instruction is required'),
+  recipeImg: Yup.mixed()
     .test('fileSize', 'Image size must be less than 2MB', value => {
       if (!value) return true; // not required
       return value.size <= 2 * 1024 * 1024;
